@@ -1,30 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""\
-Creates a new python project from scratch
-
-Usage: gitready [options] USER/REPO
-
-Options:
-  -h, --help         print this help text and exit
-  --license LICENSE  specify a license file to include [default: mit]
-  --pypi PROJECT     name to use for PyPI if different than repo name
-
-Licenses:
-  apache2, bsd, gplv3, mit, mozilla
-"""
+import argparse
 import datetime
 import io
 import os
 import shlex
 import subprocess
-import sys
 
-if sys.version_info[0] < 3:
-    input = raw_input
-
-import docopt
 import jinja2
+
+from . import __version__
 
 # import requests
 
@@ -47,12 +32,41 @@ LICENSES = {
 }
 
 
-def parse_args():
-    args = docopt.docopt(__doc__)
-    if args["USER/REPO"].count("/") != 1:
-        raise docopt.DocoptExit()
-    args["USER"], args["REPO"] = args.pop("USER/REPO").split("/")
-    return args
+def parse_args(args=None):
+    p = argparse.ArgumentParser(
+        prog="gitready",
+        description="creates a new python project from scratch",
+        usage="%(prog)s [options] USER/REPO",
+        epilog="license options:\n  apache2, bsd, gplv3, mit, mozilla",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    p.add_argument("user_repo", metavar="USER/REPO", help="user and repository names")
+    p.add_argument(
+        "-V",
+        "--version",
+        action="version",
+        version="%(prog)s " + __version__,
+        help="show version information and exit",
+    )
+    p.add_argument(
+        "--license",
+        default="mit",
+        metavar="LICENSE",
+        choices=["apache2", "bsd", "gplv3", "mit", "mozilla"],
+        help="which license file to include [default: mit]",
+    )
+    p.add_argument(
+        "--pypi",
+        default=None,
+        metavar="PROJECT",
+        help="pypi name if different than repo name",
+    )
+    parsed = p.parse_args(args=args)
+    if parsed.user_repo.count("/") != 1:
+        p.error("invalid USER/REPO")
+    parsed.user, parsed.repo = parsed.user_repo.split("/")
+    del parsed.user_repo
+    return parsed
 
 
 def run_command(command):
@@ -124,10 +138,10 @@ def initialize_repo(user, repo):
 def main():
     args = parse_args()
 
-    github_user = args["USER"]
-    project_name = args["REPO"]
-    pypi_project = args["REPO"] if args["--pypi"] is None else args["--pypi"]
-    license = args["--license"].lower()
+    github_user = args.user
+    project_name = args.repo
+    pypi_project = args.repo if args.pypi is None else args.pypi
+    license = args.license.lower()
     author, email = get_author_email()
 
     # check_pypi_not_taken(pypi_project)
