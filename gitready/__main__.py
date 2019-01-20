@@ -48,7 +48,7 @@ def run_command(command):
 
 
 def render_file(context, src, dst):
-    src_path = os.path.join(os.path.dirname(HERE), src)
+    src_path = os.path.join(os.path.dirname(os.path.dirname(HERE)), src)
     src_dirname = os.path.dirname(src_path)
     src_basename = os.path.basename(src_path)
 
