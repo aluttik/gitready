@@ -2,7 +2,7 @@
 <h3 align="center">summary</h3>
 
 <p align="center">
-<a href="https://travis-ci.org/{{ travis_user }}/{{ project }}"><img alt="Build status" src="https://img.shields.io/travis/{{ travis_user }}/{{ project }}/master.svg"></a>
+<a href="https://travis-ci.org/{{ github_user }}/{{ project }}"><img alt="Build status" src="https://img.shields.io/travis/{{ github_user }}/{{ project }}/master.svg"></a>
 <a href="https://pypi.org/project/{{ pypi_project }}/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/{{ pypi_project }}.svg"></a>
 <a href="https://pypi.org/project/{{ pypi_project }}"><img alt="Supported Python versions" src="https://img.shields.io/pypi/pyversions/{{ pypi_project }}.svg"></a>
 <a href="https://pypi.org/project/{{ pypi_project }}"><img alt="License: {{ license }}" src="https://img.shields.io/pypi/l/{{ pypi_project }}.svg"></a>
