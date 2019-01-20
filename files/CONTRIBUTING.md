@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at <https://github.com/{{ github_user }}/{{ project }}/issues>.
+Report bugs at <https://github.com/%(github_user)s/%(project)s/issues>.
 
 If you are reporting a bug, please include:
 
@@ -29,14 +29,14 @@ open to whoever wants to implement it.
 
 ### Write Documentation
 
-{{ project }} could always use more documentation, whether as part of the
-official {{ project }} docs, in docstrings, or even on the web in blog posts,
+%(project)s could always use more documentation, whether as part of the
+official %(project)s docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 ### Submit Feedback
 
 The best way to send feedback is to file an issue at
-<https://github.com/{{ github_user }}/{{ project }}/issues>.
+<https://github.com/%(github_user)s/%(project)s/issues>.
 
 If you are proposing a feature:
 
@@ -48,14 +48,14 @@ If you are proposing a feature:
 
 ## Get Started
 
-Ready to contribute? Here's how to set up {{ project }} for local development.
+Ready to contribute? Here's how to set up %(project)s for local development.
 
-1.  [Fork](https://github.com/{{ github_user }}/{{ project }}/fork) the
-    {{ project }} repo on GitHub.
+1.  [Fork](https://github.com/%(github_user)s/%(project)s/fork) the
+    %(project)s repo on GitHub.
 
 2.  Clone your fork locally:
 
-        git clone git@github.com:your_name_here/{{ project }}.git
+        git clone git@github.com:your_name_here/%(project)s.git
 
 3.  Create a branch for local development:
 
@@ -92,7 +92,7 @@ Before you submit a pull request, check that it meets these guidelines:
 1.  The pull request should include tests.
 2.  Run `black` to make sure all the code is formatted correctly.
 3.  The pull request should work for CPython 2.7, 3.4, 3.5, 3.6, and 3.7. Check
-    <https://travis-ci.org/{{ github_user }}/{{ project }}> under pull requests
+    <https://travis-ci.org/%(github_user)s/%(project)s> under pull requests
     for active pull requests or run the `tox` command and make sure that the
     tests pass for all supported Python versions.
 

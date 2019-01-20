@@ -7,8 +7,6 @@ import os
 import shlex
 import subprocess
 
-import jinja2
-
 from . import __version__
 
 # import requests
@@ -85,11 +83,11 @@ def run_command(command):
 
 def render_file(context, src, dst):
     src_path = os.path.join(os.path.dirname(os.path.dirname(HERE)), src)
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(src_path)))
-    text = env.get_template(os.path.basename(src_path)).render(**context)
+    with io.open(src_path, "r", encoding="utf-8") as fd:
+        template = fd.read()
     dst_path = os.path.join(os.getcwd(), context["project"], dst)
     with io.open(dst_path, "w", encoding="utf-8") as fd:
-        fd.write(text + "\n")
+        fd.write(template % context + "\n")
 
 
 def check_pypi_not_taken(project):
