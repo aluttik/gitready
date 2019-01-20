@@ -101,8 +101,3 @@ Before you submit a pull request, check that it meets these guidelines:
 To run a subset of tests:
 
     tox -e <env> -- tests/<file>[::test]
-
-To run all the test environments in *parallel* (you need to `pip install
-detox`):
-
-    detox

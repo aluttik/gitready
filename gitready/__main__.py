@@ -63,13 +63,16 @@ def parse_args(args=None):
         version="%(prog)s " + __version__,
         help="Show version information and exit.",
     )
-
     parsed = p.parse_args(args=args)
+
     if parsed.user_repo.count("/") != 1:
         p.error("invalid USER/REPO")
+    else:
+        parsed.user, parsed.repo = parsed.user_repo.split("/")
+        del parsed.user_repo
 
-    parsed.user, parsed.repo = parsed.user_repo.split("/")
-    del parsed.user_repo
+    if parsed.pypi is None:
+        parsed.pypi = parsed.repo
 
     return parsed
 
@@ -103,10 +106,10 @@ def check_github_not_taken(user, repo):
 
 
 def get_author_email():
-    output = run_command("git --no-pager config --list --global")
+    output = run_command("git --no-pager config --list")
     config = dict(line.split("=", 1) for line in output.splitlines())
     author, email = config.get("user.name"), config.get("user.email")
-    if author is None or email is None:
+    if not author or not email:
         raise Exception("Could not find user.name and user.email in global git config")
     #     r = requests.get("https://api.github.com/users/" + user)
     #     data = r.json()
@@ -117,10 +120,12 @@ def get_author_email():
     return author, email
 
 
-def initialize_repo(user, repo):
-    try:
-        cwd = os.getcwd()
+def initialize_repo(user, repo, cwd=None):
+    before = os.getcwd()
+    if cwd is None:
+        cwd = before
 
+    try:
         # create and enter the project directory
         project_dir = os.path.join(cwd, repo)
         os.mkdir(project_dir)
@@ -137,29 +142,26 @@ def initialize_repo(user, repo):
         remote_url = "git@github.com:{}/{}.git".format(user, repo)
         run_command("git remote add origin " + remote_url)
     finally:
-        os.chdir(cwd)
+        os.chdir(before)
 
 
 def main():
     args = parse_args()
 
-    github_user = args.user
-    project_name = args.repo
-    pypi_project = args.repo if args.pypi is None else args.pypi
     license = args.license.lower()
     author, email = get_author_email()
 
-    # check_pypi_not_taken(pypi_project)
-    # check_github_not_taken(github_user, project_name)
-    initialize_repo(github_user, project_name)
+    # check_pypi_not_taken(args.pypi)
+    # check_github_not_taken(args.user, args.repo)
+    initialize_repo(args.user, args.repo)
 
     context = {
         "year": datetime.datetime.now().year,
         "author": author,
         "email": email,
-        "github_user": github_user,
-        "project": project_name,
-        "pypi_project": pypi_project,
+        "github_user": args.user,
+        "project": args.repo,
+        "pypi_project": args.pypi,
         "license": LICENSES[license].short,
         "license_trove": LICENSES[license].trove,
     }
@@ -175,8 +177,8 @@ def main():
     render_file(context, "files/tox.ini", "tox.ini")
     render_file(context, "files/setup_cfg", "setup.cfg")
     render_file(context, "files/setup_py", "setup.py")
-    render_file(context, "files/init_py", project_name + "/__init__.py")
-    render_file(context, "files/main_py", project_name + "/__main__.py")
+    render_file(context, "files/init_py", args.repo + "/__init__.py")
+    render_file(context, "files/main_py", args.repo + "/__main__.py")
     render_file(context, "files/tests_init_py", "tests/__init__.py")
 
     if license in ("apache2",):
