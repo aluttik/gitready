@@ -1,4 +1,4 @@
-<h1 align="center">gitready</h1>
+<h1 align="center">GitReady</h1>
 <h3 align="center">Initializes a git repo for a python project</h3>
 
 <p align="center">
