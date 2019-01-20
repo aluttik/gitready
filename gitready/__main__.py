@@ -35,37 +35,44 @@ LICENSES = {
 def parse_args(args=None):
     p = argparse.ArgumentParser(
         prog="gitready",
-        description="creates a new python project from scratch",
-        usage="%(prog)s [options] USER/REPO",
-        epilog="license options:\n  apache2, bsd, gplv3, mit, mozilla",
-        formatter_class=argparse.RawTextHelpFormatter,
+        description="Creates a new python project from scratch.",
+        add_help=False,
     )
-    p.add_argument("user_repo", metavar="USER/REPO", help="user and repository names")
+    p.add_argument(
+        "user_repo", metavar="user/repo", help="GitHub user and repository names."
+    )
+    p.add_argument(
+        "--license",
+        default="mit",
+        metavar="<license>",
+        choices=["apache2", "bsd", "gplv3", "mit", "mozilla"],
+        help="""Which open source license to use. [default: mit]
+            [possible values: apache2, bsd, gplv3, mit, mozilla]""",
+    )
+    p.add_argument(
+        "--pypi",
+        default=None,
+        metavar="<project>",
+        help="PyPI name if different than the repo name.",
+    )
+    p.add_argument(
+        "-h", "--help", action="help", help="Print this help message and exit."
+    )
     p.add_argument(
         "-V",
         "--version",
         action="version",
         version="%(prog)s " + __version__,
-        help="show version information and exit",
+        help="Show version information and exit.",
     )
-    p.add_argument(
-        "--license",
-        default="mit",
-        metavar="LICENSE",
-        choices=["apache2", "bsd", "gplv3", "mit", "mozilla"],
-        help="which license file to include [default: mit]",
-    )
-    p.add_argument(
-        "--pypi",
-        default=None,
-        metavar="PROJECT",
-        help="pypi name if different than repo name",
-    )
+
     parsed = p.parse_args(args=args)
     if parsed.user_repo.count("/") != 1:
         p.error("invalid USER/REPO")
+
     parsed.user, parsed.repo = parsed.user_repo.split("/")
     del parsed.user_repo
+
     return parsed
 
 

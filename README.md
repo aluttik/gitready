@@ -16,19 +16,17 @@
 ## Command Line Interface
 
 ```
-usage: gitready [options] USER/REPO
+usage: gitready [--license <license>] [--pypi <project>] [-h] [-V] user/repo
 
-creates a new python project from scratch
+Creates a new python project from scratch.
 
 positional arguments:
-  USER/REPO          user and repository names
+  user/repo            GitHub user and repository names.
 
 optional arguments:
-  -h, --help         show this help message and exit
-  -V, --version      show version information and exit
-  --license LICENSE  which license file to include [default: mit]
-  --pypi PROJECT     pypi name if different than repo name
-
-license options:
-  apache2, bsd, gplv3, mit, mozilla
+  --license <license>  Which open source license to use. [default: mit]
+                       [possible values: apache2, bsd, gplv3, mit, mozilla]
+  --pypi <project>     PyPI name if different than the repo name.
+  -h, --help           Print this help message and exit.
+  -V, --version        Show version information and exit.
 ```
