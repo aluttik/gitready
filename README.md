@@ -12,3 +12,23 @@
 ## Installation
 
     pip install gitready
+
+## Command Line Interface
+
+```
+usage: gitready [options] USER/REPO
+
+creates a new python project from scratch
+
+positional arguments:
+  USER/REPO          user and repository names
+
+optional arguments:
+  -h, --help         show this help message and exit
+  -V, --version      show version information and exit
+  --license LICENSE  which license file to include [default: mit]
+  --pypi PROJECT     pypi name if different than repo name
+
+license options:
+  apache2, bsd, gplv3, mit, mozilla
+```
