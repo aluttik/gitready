@@ -25,6 +25,22 @@ def get_readme():
         return "\n" + f.read()
 
 
+def get_data_files(*dirs):
+    result = []
+    for dirname in dirs:
+        files_in_dir = []
+        dirs_in_dir = []
+        for basename in os.listdir(dirname):
+            path = os.path.join(dirname, basename)
+            if os.path.isfile(path):
+                files_in_dir.append(path)
+            else:
+                dirs_in_dir.append(path)
+        result.append((dirname, files_in_dir))
+        result.extend(get_data_files(*dirs_in_dir))
+    return result
+
+
 class UploadCommand(setuptools.Command):
     """Support setup.py upload."""
 
@@ -68,6 +84,7 @@ setuptools.setup(
     url=__url__,
     packages=["gitready"],
     license=__license__,
+    data_files=get_data_files('files'),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: Apache Software License",
